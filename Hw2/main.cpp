@@ -54,212 +54,70 @@ int jumpSearch(int arr[], int key, int n){
 
 int main() {
     int n = 10;
-    int key;
+    int key = 19;
     int output;
 
-    //create four random arrays with size N
-    int test1[n], test2[n], test3[n], test4[n];
+    //create random array with size n
+    int test[n];
     for (int i = 0; i < n; ++i){
-        test1[i] = 0 + (rand() % static_cast<int>(n*10 - 0 + 1));
-        test2[i] = 0 + (rand() % static_cast<int>(n*10 - 0 + 1));
-        test3[i] = 0 + (rand() % static_cast<int>(n*10 - 0 + 1));
-        test4[i] = 0 + (rand() % static_cast<int>(n*10 - 0 + 1));
+        test[i] = 0 + (rand() % static_cast<int>(n*10 - 0 + 1));
     }
 
-    //sort arrays
-    sort(test1, test1+n);
-    sort(test2, test2+n);
-    sort(test3, test3+n);
-    sort(test4, test4+n);
+    //sort array
+    sort(test, test+n);
 
-    //print arrays
+    //print array
     cout <<"Test 1: [";
-    for (const auto& e : test1) {
+    for (const auto& e : test) {
         cout << e << ",";
     }
     cout<< "]" << endl;
-    cout <<"Test 2: [";
-    for (const auto& e : test2) {
-        cout << e << ",";
-    }
-    cout<< "]" << endl;
-    cout <<"Test 3: [";
-    for (const auto& e : test3) {
-        cout << e << ",";
-    }
-    cout<< "]" << endl;
-    cout <<"Test 4: [";
-    for (const auto& e : test4) {
-        cout << e << ",";
-    }
-
-    cout<< "]" << endl << "Enter key: ";
-    cin>> key;
-    cout << endl;
 
     cout << "---------------Linear Search---------------" << endl;
-    cout << "---Test 1---\n";
     //Store the starting time
     double duration;
     clock_t startTime = clock();
     //Code block
-    output = linearSearch(test1, n, key);
+    output = linearSearch(test, n, key);
     //Compute the number of seconds that passed since the starting time
     duration = 1000 * double( clock() - startTime ) / CLOCKS_PER_SEC;
     cout << key << " is at index: " << output << endl;
     cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 2---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = linearSearch(test2, n, key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 3---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = linearSearch(test3, n, key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 4---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = linearSearch(test4, n, key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
+    cout << "-------------------------------------------" << endl;
 
     cout << "----------Recursive Linear Search----------" << endl;
-    cout << "---Test 1---\n";
     //Store the starting time
     startTime = clock();
     //Code block
-    output = recursiveLinearSearch(test1,0, n-1, key);
+    output = recursiveLinearSearch(test,0, n-1, key);
     //Compute the number of seconds that passed since the starting time
     duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
     cout << key << " is at index: " << output << endl;
     cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 2---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = recursiveLinearSearch(test2,0, n-1, key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 3---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = recursiveLinearSearch(test3,0, n-1, key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 4---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = recursiveLinearSearch(test4,0, n-1, key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-
+    cout << "-------------------------------------------" << endl;
 
     cout << "---------------Binary Search---------------" << endl;
-    cout << "---Test 1---\n";
     //Store the starting time
     startTime = clock();
     //Code block
-    output = binarySearch(test1,0,n-1,key);
+    output = binarySearch(test,0,n-1,key);
     //Compute the number of seconds that passed since the starting time
     duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
     cout << key << " is at index: " << output << endl;
     cout << "Execution took " << duration << " milliseconds." << endl;
+    cout << "-------------------------------------------" << endl;
 
-    cout << "---Test 2---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = binarySearch(test2,0,n-1,key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 3---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = binarySearch(test3,0,n-1,key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 4---\n";
-    //Store the starting time
-    startTime = clock();
-    //Code block
-    output = binarySearch(test4,0,n - 1,key);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
 
     cout << "----------------Jump Search----------------" << endl;
-    cout << "---Test 1---\n";
     //Store the starting time
     startTime = clock();
     //Code block
-    output = jumpSearch(test1, key, n);
+    output = jumpSearch(test, key, n);
     //Compute the number of seconds that passed since the starting time
     duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
     cout << key << " is at index: " << output << endl;
     cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 2---\n";
-    startTime = clock();
-    //Code block
-    output = jumpSearch(test2, key, n);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 3---\n";
-    startTime = clock();
-    //Code block
-    output = jumpSearch(test3, key, n);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
-
-    cout << "---Test 4---\n";
-    startTime = clock();
-    //Code block
-    output = jumpSearch(test4, key, n);
-    //Compute the number of seconds that passed since the starting time
-    duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
-    cout << key << " is at index: " << output << endl;
-    cout << "Execution took " << duration << " milliseconds." << endl;
+    cout << "-------------------------------------------" << endl;
 
 
 }
