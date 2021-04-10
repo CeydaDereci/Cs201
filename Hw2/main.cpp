@@ -11,14 +11,12 @@ int linearSearch(int arr[], int n, int key){
     return -1;
 }
 
-int recursiveLinearSearch(int arr[], int l, int r, int x){
-    if (r < l)
+int recursiveLinearSearch(int arr[], int n, int key){
+    if(n < 0)
         return -1;
-    if (arr[l] == x)
-        return l;
-    if (arr[r] == x)
-        return r;
-    return recursiveLinearSearch(arr, l + 1,r - 1, x);
+    if(arr[n - 1] == key)
+        return n - 1;
+    return recursiveLinearSearch(arr,n -1, key);
 }
 
 int binarySearch( int* arr, int low, int high, int key) {
@@ -53,8 +51,8 @@ int jumpSearch(int arr[], int key, int n){
 
 
 int main() {
-    int n = 10;
-    int key = 19;
+    int n = 500000;
+    int key = 61;
     int output;
 
     //create random array with size n
@@ -67,7 +65,7 @@ int main() {
     sort(test, test+n);
 
     //print array
-    cout <<"Test 1: [";
+    cout <<"Test Array: [";
     for (const auto& e : test) {
         cout << e << ",";
     }
@@ -89,7 +87,7 @@ int main() {
     //Store the starting time
     startTime = clock();
     //Code block
-    output = recursiveLinearSearch(test,0, n-1, key);
+    output = recursiveLinearSearch(test, n, key);
     //Compute the number of seconds that passed since the starting time
     duration = 1000 * double( clock() - startTime) / CLOCKS_PER_SEC;
     cout << key << " is at index: " << output << endl;
