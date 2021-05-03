@@ -10,9 +10,8 @@ MovieList::MovieList(): size(0),head(NULL),tail(NULL){
 }
 //Destructor
 MovieList::~MovieList() {
-    //while(!isEmpty()){
-        //remove
-    //}
+    while (!isEmpty())
+        removeMovie(1);
 }
 //Copy Constructor
 MovieList::MovieList(const MovieList &aList) {
@@ -22,8 +21,6 @@ MovieList::MovieList(const MovieList &aList) {
         head->movieTime = aList.head->movieTime;
         head->audienceRadius = aList.head->audienceRadius;
         head->availableSeats = aList.head->availableSeats;
-        head->occupiableSeats = aList.head->occupiableSeats;
-        head->numRes = aList.head->numRes;
         head->numRows = aList.head->numRows;
         head->numColumns = aList.head->numColumns;
         head->next = NULL;
@@ -36,8 +33,6 @@ MovieList::MovieList(const MovieList &aList) {
             tail->next->movieTime = origNode->movieTime;
             tail->next->audienceRadius = origNode->audienceRadius;
             tail->next->availableSeats = origNode->availableSeats;
-            tail->next->occupiableSeats = origNode->occupiableSeats;
-            tail->next->numRes = origNode->numRes;
             tail->next->numRows = origNode->numRows;
             tail->next->numColumns = origNode->numColumns;
             tail->next->next = NULL;
@@ -46,13 +41,29 @@ MovieList::MovieList(const MovieList &aList) {
             origNode = origNode->next;
         }
     }
+    else
+        head = NULL;
 }
 
 bool MovieList::isEmpty() const {
     return size == 0;
 }
 
-void MovieList::add(const long movieID, const int audienceRadius) {
+int MovieList::getLength() {
+    return size;
+}
+
+bool MovieList::checkExists(const long movieID) const {
+    MovieNode* temp = head;
+    while(temp != NULL){
+        if(temp->movieID == movieID)
+            return true;
+        temp = temp->next;
+    }
+    return false;
+}
+
+void MovieList::addMovie(const long movieID, const int audienceRadius) {
     if(isEmpty()){
         head = new MovieNode;
 
@@ -61,9 +72,7 @@ void MovieList::add(const long movieID, const int audienceRadius) {
         head->audienceRadius = audienceRadius;
         head->numRows = calculateRows(audienceRadius);
         head->numColumns = calculateColumns(audienceRadius);
-        head->numRes = 0;
         head->availableSeats = head->numRows * head->numColumns;
-        head->occupiableSeats = head->availableSeats;
 
         head->next = NULL;
         head->prev = NULL;
@@ -84,9 +93,7 @@ void MovieList::add(const long movieID, const int audienceRadius) {
                 tail->audienceRadius = audienceRadius;
                 tail->numRows = calculateRows(audienceRadius);
                 tail->numColumns = calculateColumns(audienceRadius);
-                tail->numRes = 0;
                 tail->availableSeats = tail->numRows * tail->numColumns;
-                tail->occupiableSeats = tail->availableSeats;
                 head->next = tail;
                 size ++;
             }
@@ -97,9 +104,7 @@ void MovieList::add(const long movieID, const int audienceRadius) {
                 tail->next->audienceRadius = audienceRadius;
                 tail->next->numRows = calculateRows(audienceRadius);
                 tail->next->numColumns = calculateColumns(audienceRadius);
-                tail->next->numRes = 0;
                 tail->next->availableSeats = tail->next->numRows * tail->next->numColumns;
-                tail->next->occupiableSeats = tail->next->availableSeats;
                 tail = tail->next;
             }
 
@@ -109,26 +114,23 @@ void MovieList::add(const long movieID, const int audienceRadius) {
     }
 }
 
-void MovieList::remove(const long movieID) {
-    if(size < 1){
-        cout << "There are no movies on the show." << endl;
+void MovieList::removeMovie(int index) {
+    MovieNode *cur;
+    if ((index < 1) || (index > getLength()))
+        return;
+    --size;
+    if (index == 1){
+        cur = head;
+        head = head->next;
     }
-    else {
-        if (checkExists(movieID)) {
-            //cancel reservations
-            //delete movie
-            MovieNode* temp = head;
-            while(temp->next != NULL){
-                if(temp->movieID = movieID){
-
-                }
-                temp = temp->next;
-            }
-        }
-        else {
-            cout << "Movie at " << calculateTime(movieID) << " does not exits!" << endl;
-        }
+    else{
+        MovieNode *prev = find(index-1);
+        cur = prev->next;
+        prev->next = cur->next;
     }
+    cur->next = NULL;
+    delete cur;
+    cur = NULL;
 }
 
 void MovieList::showAll() const {
@@ -145,35 +147,82 @@ void MovieList::showAll() const {
     }
 }
 
-void MovieList::show(const long movieID) const {
+int MovieList::getRadius(const long movieID) const {
     if (checkExists(movieID)) {
         int radius = 0;
         MovieNode* temp = head;
         while(temp != NULL){
             if(temp->movieID == movieID){
-                cout << "Movie at " << calculateTime(movieID) << " has (" << temp->availableSeats << " available seats)" << endl;
                 radius = temp->audienceRadius;
             }
             temp = temp->next;
         }
-        printSeatPlan(radius);
+        return radius;
     }
     else{
-        cout<<"Movie at "<< calculateTime(movieID) << " is not found" << endl;
+        return -1;
     }
 }
 
-//Helper Methods
-bool MovieList::checkExists(const long movieID) const {
+int MovieList::getAvailableSeats(const long movieID) const {
+    if (checkExists(movieID)) {
+        int seats = 0;
+        MovieNode* temp = head;
+        while(temp != NULL){
+            if(temp->movieID == movieID){
+                seats = temp->availableSeats;
+            }
+            temp = temp->next;
+        }
+        return seats;
+    }
+    else{
+        return -1;
+    }
+}
+
+void MovieList::decreaseOneSeat(const long movieID) {
+    if (checkExists(movieID)) {
+        MovieNode* temp = head;
+        while(temp != NULL){
+            if(temp->movieID == movieID){
+                temp->availableSeats = temp->availableSeats - 1;
+            }
+            temp = temp->next;
+        }
+    }
+}
+
+void MovieList::increaseOneSeat(const long movieID) {
+    if (checkExists(movieID)) {
+        MovieNode* temp = head;
+        while(temp != NULL){
+            if(temp->movieID == movieID){
+                temp->availableSeats = temp->availableSeats + 1;
+            }
+            temp = temp->next;
+        }
+    }
+}
+
+int MovieList::findIndex(const long movieID) {
     MovieNode* temp = head;
-    while(temp != NULL){
-        if(temp->movieID == movieID)
-            return true;
-        temp = temp->next;
+    int index = 1;
+    if(checkExists(movieID)){
+        while (temp != NULL){
+            if (temp->movieID == movieID) {
+                break;
+            }
+            index++;
+            temp = temp->next;
+        }
+        return index;
     }
-    return false;
+    else
+        return -1;
 }
 
+//helper functions
 string MovieList::calculateTime(const long movieID) const {
     timeval time;
     time.tv_sec = movieID ;
@@ -202,34 +251,26 @@ int MovieList::calculateColumns(int audienceRadius) {
     return columns;
 }
 
-void MovieList::printSeatPlan(int audienceRadius) const {
-    char seatLetter = 'A';
-    cout << "\t";
-    for(int k = 0; k < 26; k++)
-    {
-        if(k % (audienceRadius + 1) == 0) {
-            cout << seatLetter << "\t";
-        }
-        seatLetter++;
-    }
-    cout << "" << endl;
-    for(int i = 0; i < 30; i++) {
-        if (i % (audienceRadius + 1) == 0) {
-            cout << i + 1;
-            for (int m = 0; m < 26; m++) {
-                if (m % (audienceRadius + 1) == 0) {
-                    //to do check is reserved
-                    if (1){ //isReserved(i + 1, m + 'A'))
-                        cout << "\t" << "x" << " "; //occupied seats
-                    } else {
-                        cout << "\t" << "o" << " "; //available seats
-                    }
-                }
-            }
-            cout << endl;
-        }
+MovieList::MovieNode *MovieList::find(int index) const {
+    if ((index < 1) || (index > size))
+        return NULL;
+    else{
+        MovieNode *cur = head;
+        for (int skip = 1; skip < index; ++skip)
+            cur = cur->next;
+        return cur;
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

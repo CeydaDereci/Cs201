@@ -14,10 +14,16 @@ class MovieList {
         ~MovieList();
         MovieList(const MovieList& aList);
         bool isEmpty() const;
-        void add(const long movieID, const int audienceRadius);
-        void remove(const long movieID);
+        int getLength();
+        bool checkExists(const long movieID) const;
+        void addMovie(const long movieID, const int audienceRadius);
+        void removeMovie(int index);
         void showAll() const;
-        void show(const long movieID) const;
+        int getRadius(const long movieID) const;
+        int getAvailableSeats(const long movieID)const;
+        void decreaseOneSeat(const long movieID);
+        void increaseOneSeat(const long movieID);
+        int findIndex(const long movieID);
 
     private:
         struct MovieNode{
@@ -25,8 +31,6 @@ class MovieList {
             string movieTime;
             int audienceRadius;
             int availableSeats;
-            int occupiableSeats;
-            int numRes;
             int numRows;
             int numColumns;
 
@@ -37,12 +41,11 @@ class MovieList {
         MovieNode *head;
         MovieNode *tail;
 
-        //helper methods
+        //helper functions
         string calculateTime(const long movieID) const;
-        bool checkExists(const long movieID) const;
         int calculateRows(int audienceRadius);
         int calculateColumns(int audienceRadius);
-        void printSeatPlan(int audienceRadius) const;
+        MovieNode *find(int index) const;
 
 };
 

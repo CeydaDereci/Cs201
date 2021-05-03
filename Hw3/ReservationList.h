@@ -4,7 +4,9 @@
 
 #ifndef HW3_RESERVATIONLIST_H
 #define HW3_RESERVATIONLIST_H
-
+#include <string>
+#include <iostream>
+using namespace std;
 
 class ReservationList{
 public:
@@ -16,6 +18,12 @@ public:
     bool retrieve(int index, int& resCode) const;
     bool insert(int index, int resCode);
     bool remove(int index);
+    void makeRes(int id,int row,int col,int resCode);
+    void showRes(int resCode) const;
+    bool checkAllExist(ReservationList resCode);
+    ReservationList findByID(long id);
+    bool isReserved(long id, int row, int col) const;
+    void cancelRes(ReservationList resCode);
 private:
     struct ReservationNode{
         int Code;
@@ -26,7 +34,9 @@ private:
     };
     int size;
     ReservationNode *head;
+    ReservationNode *tail;
     ReservationNode *find(int index) const;
+    string calculateTime(const long movieID) const;
 
 };
 

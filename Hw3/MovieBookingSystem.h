@@ -21,10 +21,16 @@ public:
     void showMovie( const long movieID) const;
     int makeReservation( const long movieID, const int row, const char col);
     void cancelReservations( ReservationList resCode);
-    void showReservation( const int resCode) const;
+    void showReservation(const int resCode) const;
 private:
     ReservationList reservationCodes;
     MovieList movies;
+    int resCode;
+
+    //helper functions
+    void printSeatPlan(long id,int audienceRadius) const;
+    string calculateTime(const long movieID) const;
+    bool isOccupiable(const long movieID,int row, char col);
 };
 
 
