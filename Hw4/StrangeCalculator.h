@@ -5,6 +5,7 @@
 #ifndef HW4_STRANGECALCULATOR_H
 #define HW4_STRANGECALCULATOR_H
 #include <string>
+#include <iostream>
 using namespace std;
 
 string infix2prefix( const string exp );

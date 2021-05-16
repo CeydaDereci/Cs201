@@ -89,7 +89,29 @@ bool isBalancedInfix(const string exp) {
 }
 
 void evaluateInputPrefixExpression() {
-
+    //ask the user for an infix input
+    string infix,temp;
+    temp = "";
+    int k = 0;
+    cout << "Enter an infix input: " << endl;
+    cin >> infix;
+    //remove the possible spaces in the input
+    for(int i = 0; i < infix.length(); i++){
+        if(infix[i] != ' '){
+            temp[k] = infix[i];
+            k++;
+        }
+    }
+    //check isBalancedInfix
+    if(!isBalancedInfix(temp)){
+        cout << "Infix is not balanced!";
+    }
+    else {
+        // convert infix2prefix
+        temp = infix2prefix(temp);
+        // evaluatePrefix
+        evaluatePrefix(temp);
+    }
 }
 
 string infixToPostfix(string infix)
@@ -146,8 +168,6 @@ int getPriority(char C)
         return 1;
     else if (C == '*' || C == '/')
         return 2;
-    else if (C == '^')
-        return 3;
     return 0;
 }
 
