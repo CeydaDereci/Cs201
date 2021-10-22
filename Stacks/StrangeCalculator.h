@@ -15,6 +15,7 @@ void evaluateInputPrefixExpression( );
 string infixToPostfix(string infix);
 int getPriority(char C);
 bool isOperator(char c);
+bool arePair(char opening,char closing);
 
 class StrangeCalculator {
     public:

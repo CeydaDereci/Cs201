@@ -56,61 +56,42 @@ double evaluatePrefix(const string exp) {
 
 bool isBalancedInfix(const string exp) {
     StrangeCalculator s;
-    char x;
-    for (int i = 0; i < exp.length(); i++){
-        if (exp[i] == '(' || exp[i] == '[' || exp[i] == '{'){
+    for(int i =0;i<exp.length();i++)
+    {
+        if(exp[i] == '(' || exp[i] == '{' || exp[i] == '[')
             s.push(exp[i]);
-        }
-        if (s.isEmpty())
-            return false;
-        switch (exp[i]) {
-            case ')':
-                x = s.top();
+        else if(exp[i] == ')' || exp[i] == '}' || exp[i] == ']')
+        {
+            if(s.isEmpty() || !arePair(s.top(),exp[i]))
+                return false;
+            else
                 s.pop();
-                if (x == '{' || x == '[')
-                    return false;
-                break;
-            case '}':
-                x = s.top();
-                s.pop();
-                if (x == '(' || x == '[')
-                    return false;
-                break;
-
-            case ']':
-                x = s.top();
-                s.pop();
-                if (x == '(' || x == '{')
-                    return false;
-                break;
         }
     }
-    return (s.isEmpty());
+    return s.isEmpty() ? true:false;
 }
 
 void evaluateInputPrefixExpression() {
     //ask the user for an infix input
-    string infix,temp;
-    temp = "";
-    int k = 0;
+    string infix;
+    int count = 0;
     cout << "Enter an infix input: " << endl;
-    cin >> infix;
+    getline(cin,infix);
     //remove the possible spaces in the input
-    for(int i = 0; i < infix.length(); i++){
-        if(infix[i] != ' '){
-            temp[k] = infix[i];
-            k++;
-        }
+    for (int i = 0; infix[i]; i++) {
+        if (infix[i] != ' ')
+            infix[count++] = infix[i];
     }
+    infix[count] = '\0';
     //check isBalancedInfix
-    if(!isBalancedInfix(temp)){
+    if(!isBalancedInfix(infix)){
         cout << "Infix is not balanced!";
     }
     else {
         // convert infix2prefix
-        temp = infix2prefix(temp);
+        infix = infix2prefix(infix);
         // evaluatePrefix
-        evaluatePrefix(temp);
+        evaluatePrefix(infix);
     }
 }
 
@@ -137,23 +118,11 @@ string infixToPostfix(string infix)
         {
             if (isOperator(s.top()))
             {
-                if(infix[i] == '^')
-                {
-                    while ((infix[i]) <= getPriority(s.top()))
-                    {
-                        output += s.top();
-                        s.pop();
-                    }
 
-                }
-                else
+                while (getPriority(infix[i]) < getPriority(s.top()))
                 {
-                    while (getPriority(infix[i]) < getPriority(s.top()))
-                    {
-                        output += s.top();
-                        s.pop();
-                    }
-
+                    output += s.top();
+                    s.pop();
                 }
                 s.push(infix[i]);
             }
@@ -162,8 +131,7 @@ string infixToPostfix(string infix)
     return output;
 }
 
-int getPriority(char C)
-{
+int getPriority(char C){
     if (C == '-' || C == '+')
         return 1;
     else if (C == '*' || C == '/')
@@ -171,12 +139,21 @@ int getPriority(char C)
     return 0;
 }
 
-bool isOperator(char c)
-{
+bool isOperator(char c){
     return (!isalpha(c) && !isdigit(c));
 }
 
 StrangeCalculator::StrangeCalculator(): topPtr(NULL){
+}
+
+bool arePair(char opening,char closing){
+    if(opening == '(' && closing == ')')
+        return true;
+    else if(opening == '{' && closing == '}')
+        return true;
+    else if(opening == '[' && closing == ']')
+        return true;
+    return false;
 }
 
 StrangeCalculator::StrangeCalculator(const StrangeCalculator &aStrangeCalculator) {
@@ -188,9 +165,7 @@ StrangeCalculator::StrangeCalculator(const StrangeCalculator &aStrangeCalculator
         topPtr->item = aStrangeCalculator.topPtr->item;
         // copy rest of stack
         StackNode *newPtr = topPtr;
-        for (StackNode *origPtr = aStrangeCalculator.topPtr->next;
-             origPtr != NULL;
-             origPtr = origPtr->next){
+        for (StackNode *origPtr = aStrangeCalculator.topPtr->next; origPtr != NULL; origPtr = origPtr->next){
             newPtr->next = new StackNode;
             newPtr = newPtr->next;
             newPtr->item = origPtr->item;
